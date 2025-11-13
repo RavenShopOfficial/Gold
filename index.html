@@ -118,7 +118,7 @@
             <!-- بخش عنوان و نکته (سمت راست) -->
             <div class="flex-grow">
                 <h1 class="flex items-center text-orange-500 font-bold text-xl sm:text-2xl">
-                    <span classs="ml-2 bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; background-color: #f97316; color: white; margin-left: 8px;">۲</span>
+                    <span class="ml-2 bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; background-color: #f97316; color: white;">۲</span>
                     لطفاً مقدار شارژ مورد نظر را انتخاب کنید
                 </h1>
                 <p class="text-gray-600 text-sm mt-2 mr-8">
@@ -145,11 +145,11 @@
 
         <!-- کانتینر محصولات (Grid) -->
         <div id="products-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 hidden">
-            <!-- کارت‌های محصولات به صورت داینامیک از API بارگذاری می‌شوند -->
+            <!-- کارت‌های محصولات به صورت داینامیک اینجا قرار می‌گیرند -->
         </div>
         
         <!-- پیغام موفقیت/خطای خرید (شبیه Alert) -->
-        <div id="cart-message" classS="fixed top-0 left-1/2 -translate-x-1/2 mt-4 p-4 text-center rounded-lg shadow-xl z-50 transition-transform duration-300 transform scale-0" role="alert">
+        <div id="cart-message" class="fixed top-0 left-1/2 -translate-x-1/2 mt-4 p-4 text-center rounded-lg shadow-xl z-50 transition-transform duration-300 transform scale-0" role="alert">
             <!-- اینجا پیام‌های خرید نمایش داده می‌شوند -->
         </div>
 
@@ -162,7 +162,7 @@
         const cartMessage = document.getElementById('cart-message');
         
         // !!! مهم: آدرس ربات تلگرام خود را اینجا وارد کنید
-        const TELEGRAM_BOT_URL = 'https://t.me/YourTelegramBotID'; 
+        const TELEGRAM_BOT_URL = 'https://t.me/YOUR_BOT_USERNAME_HERE'; // <--- آدرس ربات خود را اینجا بگذارید
         
         // آدرس API شما
         const API_URL = 'https://ravenshop-proxy.bloodstrike.workers.dev/products';
@@ -172,20 +172,17 @@
             cartMessage.textContent = message;
             
             // تنظیم استایل بر اساس نوع پیغام
-            cartMessage.classList.remove('bg-green-500', 'bg-red-500', 'bg-blue-500', 'text-white', 'scale-0');
+            cartMessage.className = 'fixed top-0 left-1/2 -translate-x-1/2 mt-4 p-4 text-center rounded-lg shadow-xl z-50 transition-transform duration-300 transform scale-100 text-white'; // Base classes
 
             if (type === 'success') {
-                cartMessage.classList.add('bg-green-500', 'text-white');
+                cartMessage.classList.add('bg-green-500');
             } else if (type === 'error') {
-                cartMessage.classList.add('bg-red-500', 'text-white');
+                cartMessage.classList.add('bg-red-500');
             } else if (type === 'info') {
-                cartMessage.classList.add('bg-blue-500', 'text-white');
+                cartMessage.classList.add('bg-blue-500');
             } else {
-                cartMessage.classList.add('bg-gray-500', 'text-white');
+                cartMessage.classList.add('bg-gray-500');
             }
-
-            // نمایش پیغام با انیمیشن
-            cartMessage.classList.add('scale-100');
 
             // مخفی کردن بعد از ۳ ثانیه
             setTimeout(() => {
@@ -210,7 +207,6 @@
             const isPremium = product.name.toLowerCase().includes('premium');
             
             // بررسی برای برچسب "GAMES CLUB ONLY"
-            // این منطق بر اساس عکس قبلی شماست، ممکن است نیاز به تغییر داشته باشد
             const hasBadge = !product.name.toLowerCase().includes('pass');
 
             // استخراج عنوان اصلی (Cname)
@@ -225,42 +221,42 @@
                 }
             }
 
+            // ساخت المان کارت
+            const cardElement = document.createElement('div');
+            cardElement.className = 'product-card rounded-xl p-4 flex flex-col items-center justify-between';
+
             // ساخت بدنه HTML کارت
-            const cardHtml = `
-                <div class="product-card rounded-xl p-4 flex flex-col items-center justify-between">
-                    ${hasBadge ? '<div class="badge-top-right">GAMES CLUB ONLY</div>' : ''}
-                    
-                    <!-- بخش تصویر -->
-                    <div class="flex-grow flex items-center justify-center p-2 mb-3 h-32">
-                        <img src="${imageSrc}" alt="${title}" class="max-w-full max-h-full object-contain" onerror="this.onerror=null;this.src='https://placehold.co/120x120/f0f0f0/333?text=${title}';">
-                    </div>
-                    
-                    <!-- بخش اطلاعات -->
-                    <div class="text-center w-full">
-                        ${isPremium ? 
-                            `<div class="premium-title mb-1">${title}</div>` : 
-                            `<div class="text-gray-800 text-lg font-bold mb-1">${title}</div>`
-                        }
-                        
-                        ${subtitle ? `<div class="text-xs text-gray-500 h-8">${subtitle}</div>` : '<div class="h-8"></div>'}
-                    </div>
-
-                    <!-- نمایش قیمت تومانی (جدید - بالای دکمه) -->
-                    <div classs="toman-price-display w-full mt-2">
-                        ${priceToman} تومان
-                    </div>
-
-                    <!-- دکمه خرید تلگرام -->
-                    <a href="${TELEGRAM_BOT_URL}?start=buy_${product.id}" target="_blank" class="telegram-button w-full text-white font-bold rounded-lg shadow-md hover:shadow-lg text-base no-underline mt-2">
-                        خرید مستقیم این محصول
-                    </a>
+            cardElement.innerHTML = `
+                ${hasBadge ? '<div class="badge-top-right">GAMES CLUB ONLY</div>' : ''}
+                
+                <!-- بخش تصویر -->
+                <div class="flex-grow flex items-center justify-center p-2 mb-3 h-32">
+                    <img src="${imageSrc}" alt="${title}" class="max-w-full max-h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="hidden text-gray-400 text-sm">(تصویر موجود نیست)</div>
                 </div>
+                
+                <!-- بخش اطلاعات -->
+                <div class="text-center w-full">
+                    ${isPremium ? 
+                        `<div class="premium-title mb-1">${title}</div>` : 
+                        `<div class="text-gray-800 text-lg font-bold mb-1">${title}</div>`
+                    }
+                    
+                    ${subtitle ? `<div class="text-xs text-gray-500 h-8">${subtitle}</div>` : '<div class="h-8"></div>'}
+                </div>
+
+                <!-- نمایش قیمت تومانی (جدید - بالای دکمه) -->
+                <div class="toman-price-display w-full mt-2">
+                    ${priceToman} تومان
+                </div>
+
+                <!-- دکمه خرید تلگرام -->
+                <a href="${TELEGRAM_BOT_URL}?start=buy_${product.id}" target="_blank" class="telegram-button w-full text-white font-bold rounded-lg shadow-md hover:shadow-lg text-base no-underline mt-2">
+                    خرید مستقیم این محصول
+                </a>
             `;
             
-            const div = document.createElement('div');
-            div.innerHTML = cardHtml.trim();
-            
-            return div.firstChild;
+            return cardElement;
         }
 
         // تابع اصلی برای دریافت قیمت‌ها و رندر کردن محصولات
@@ -268,8 +264,9 @@
             try {
                 const response = await fetch(API_URL);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`خطا در اتصال به سرور: ${response.status}`);
                 }
+                
                 const products = await response.json();
 
                 // ۲. حذف پیغام لودینگ
@@ -299,14 +296,23 @@
         document.addEventListener('DOMContentLoaded', () => {
             // تنظیم تصاویر هدر
             // مطمئن شوید که این فایل‌ها در پوشه images در کنار فایل HTML شما هستند
-            bsLogoImg.src = "images/BloodStrikeLogo.webp";
-            bsTextImg.src = "images/BloodStrike.webp";
+            // اگر فایل‌ها در همان دایرکتوری index.html هستند، آدرس را به './' تغییر دهید
+            const imageBasePath = 'images/'; // یا هر مسیری که تنظیم کرده‌اید
+            
+            const logoImg = document.getElementById('bslogo-img');
+            const textImg = document.getElementById('bloodstrike-text-img');
+            
+            if (logoImg) {
+                logoImg.src = `${imageBasePath}BloodStrikeLogo.webp`;
+            }
+            if (textImg) {
+                textImg.src = `${imageBasePath}BloodStrike.webp`;
+            }
             
             // فراخوانی API و رندر محصولات
             fetchProductsAndRender();
         });
 
-        
     </script>
 </body>
 </html>

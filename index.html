@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فروشگاه محصولات Blood Strike</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
@@ -37,7 +36,7 @@
             border: 1px solid #e5e7eb;
             position: relative;
             overflow: hidden;
-            height: 100%; /* ارتفاع یکسان برای Grid */
+            /* ارتفاع یکسان برای Grid: حذف شد تا ارتفاع انعطاف‌پذیر باشد */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -48,6 +47,19 @@
             border-color: #f97316; /* Orange-600 */
         }
 
+        /* استایل جدید برای کانتینر تصویر به صورت پس زمینه */
+        .product-image-container {
+            height: 140px; /* افزایش ارتفاع برای فضای بیشتر تصویر */
+            width: 100%;
+            background-size: contain; /* مهم: تصویر را کاملاً در کادر نمایش می‌دهد */
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 0.5rem 0.5rem 0 0; /* گرد شدن گوشه‌های بالا */
+            background-color: #d1d5db; /* پس زمینه خاکستری روشن برای کانتینر تصویر */
+            z-index: 1;
+            position: relative;
+        }
+
         /* استایل برای برچسب بالای محصولات */
         .badge-top-right {
             position: absolute;
@@ -55,8 +67,8 @@
             right: 0;
             background-color: #dc2626; /* Red-600 (پیش‌فرض) */
             color: white;
-            padding: 2px 8px;
-            font-size: 0.75rem;
+            padding: 2px 6px; /* کاهش پدینگ */
+            font-size: 0.7rem; /* کاهش سایز فونت */
             font-weight: bold;
             border-bottom-left-radius: 8px;
             z-index: 10;
@@ -70,19 +82,19 @@
             color: #fbc02d; /* Fallback */
             font-weight: 700;
             padding: 4px 0;
-            font-size: 1.125rem; /* text-lg */
+            font-size: 1rem; /* کاهش سایز فونت */
         }
 
         /* استایل قیمت تومانی (جدید - بالای دکمه) */
         .toman-price-display {
             background-color: #ffe8d6; /* Light Orange/Peach */
             color: #d97706; /* Orange-600 */
-            font-size: 1.125rem; /* text-lg */
+            font-size: 1rem; /* کاهش سایز فونت */
             font-weight: 800;
             text-align: center;
-            padding: 0.5rem 0;
+            padding: 0.4rem 0; /* کاهش پدینگ */
             border-radius: 0.5rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem; /* کاهش فاصله */
             box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
@@ -94,8 +106,8 @@
             align-items: center;
             justify-content: center;
             white-space: nowrap;
-            font-size: 0.95rem; 
-            padding: 0.75rem 0.5rem; 
+            font-size: 0.85rem; /* کاهش سایز فونت */
+            padding: 0.5rem 0.5rem; /* کاهش پدینگ */
             font-weight: 700;
             text-decoration: none; /* برای تگ <a> */
         }
@@ -127,21 +139,18 @@
 
     <div class="max-w-7xl mx-auto">
         
-        <!-- هدر صفحه -->
         <header id="header-content" class="mb-6 sm:mb-8 p-4 bg-white rounded-xl shadow-lg border-t-4 border-orange-500 flex items-center justify-between flex-wrap">
             
-            <!-- بخش عنوان و نکته (سمت راست) -->
             <div class="flex-grow">
                 <h1 class="flex items-center text-orange-500 font-bold text-xl sm:text-2xl">
                     <span class="ml-2 bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; background-color: #f97316; color: white;">۲</span>
-                    قیمت مقدار گلد مورد نظر را مشاهده کنید
+                    قیمت محصول مورد نظر را مشاهده کنید
                 </h1>
                 <p class="text-gray-600 text-sm mt-2 mr-8">
                     <b>نکته: برای خرید محصول، به ربات تلگرام هدایت می‌شوید.</b>
                 </p>
             </div>
 
-            <!-- لوگو و متن سفارشی (سمت چپ) -->
             <div id="header-logo-container" class="flex items-center gap-2 flex-shrink-0 mt-4 sm:mt-0">
                 <img src="images/BloodStrikeLogo.webp" alt="لوگوی Blood Strike" class="w-10 h-10 rounded-lg shadow-md" onerror="this.onerror=null;this.src='https://placehold.co/40x40/f0f0f0/333?text=Logo';">
                 <img src="images/BloodStrike.webp" alt="متن Blood Strike" class="h-6 w-auto" onerror="this.onerror=null;this.src='https://placehold.co/100x24/f0f0f0/333?text=Text';">
@@ -149,7 +158,6 @@
             
         </header>
 
-        <!-- نمایش پیام Loading یا Error -->
         <div id="status-message" class="text-center p-6 text-gray-700 text-lg font-medium">
             <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -158,15 +166,11 @@
             در حال دریافت اطلاعات محصولات...
         </div>
 
-        <!-- کانتینر محصولات (Grid) -->
-        <div id="products-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 hidden">
-            <!-- کارت‌های محصولات به صورت داینامیک اینجا قرار می‌گیرند -->
-        </div>
+        <div id="products-container" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 hidden">
+            </div>
         
-        <!-- پیغام موفقیت/خطای خرید (شبیه Alert) -->
         <div id="cart-message" class="fixed top-0 left-1/2 -translate-x-1/2 mt-4 p-4 text-center rounded-lg shadow-xl z-50 transition-transform duration-300 transform scale-0" role="alert">
-            <!-- اینجا پیام‌های خرید نمایش داده می‌شوند -->
-        </div>
+            </div>
 
     </div>
 
@@ -294,35 +298,29 @@
 
             // ساخت المان کارت
             const cardElement = document.createElement('div');
-            cardElement.className = 'product-card rounded-xl p-4 flex flex-col items-center justify-between';
+            // p-2 پدینگ کارت
+            cardElement.className = 'product-card rounded-xl p-2 flex flex-col items-center justify-between';
 
             // ساخت بدنه HTML کارت
             cardElement.innerHTML = `
                 ${badgeText ? `<div class="badge-top-right">${badgeText}</div>` : ''}
                 
-                <!-- بخش تصویر -->
-                <div class="flex-grow flex items-center justify-center p-2 mb-3 h-32">
-                    <img src="${imageSrc}" alt="${title}" class="max-w-full max-h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <div class="hidden text-gray-400 text-sm">(تصویر موجود نیست)</div>
-                </div>
+                <div class="product-image-container w-full mb-2" style="background-image: url('${imageSrc}');">
+                    </div>
                 
-                <!-- بخش اطلاعات -->
                 <div class="text-center w-full">
                     ${isPremium ? 
                         `<div class="premium-title mb-1">${title}</div>` : 
-                        `<div class="text-gray-800 text-lg font-bold mb-1">${title}</div>`
+                        `<div class="text-gray-800 text-base font-bold mb-1">${title}</div>` // کاهش سایز فونت
                     }
                     
-                    ${subtitle ? `<div class="text-xs text-gray-500 h-8">${subtitle}</div>` : '<div class="h-8"></div>'}
-                </div>
+                    ${subtitle ? `<div class="text-xs text-gray-500 h-6">${subtitle}</div>` : '<div class="h-6"></div>'} </div>
 
-                <!-- نمایش قیمت تومانی (جدید - بالای دکمه) -->
                 <div class="toman-price-display w-full mt-2">
                     ${priceToman} تومان
                 </div>
 
-                <!-- دکمه خرید تلگرام (لینک بر اساس منطق جدید) -->
-                <a href="${telegramLink}" target="_blank" class="telegram-button w-full text-white font-bold rounded-lg shadow-md hover:shadow-lg text-base no-underline mt-2">
+                <a href="${telegramLink}" target="_blank" class="telegram-button w-full text-white font-bold rounded-lg shadow-md hover:shadow-lg mt-2">
                     خرید از ربات تلگرام
                 </a>
             `;

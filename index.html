@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فروشگاه محصولات Blood Strike</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* تنظیمات کلی فونت و رنگ پس زمینه */
+        body {
+            font-family: 'Vazirmatn', 'Inter', sans-serif;
+            background-color: #f7f7f7;
+        }
+
+        /* استایل سفارشی برای کارت محصولات */
+        .product-card {
+            background-color: #ffffff;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            position: relative;
+            overflow: hidden;
+            height: 100%; /* ارتفاع یکسان برای Grid */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .product-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+            border-color: #f97316; /* Orange-600 */
+        }
+
+        /* استایل برای برچسب بالای محصولات */
+        .badge-top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #dc2626; /* Red-600 */
+            color: white;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-bottom-left-radius: 8px;
+            z-index: 10;
+        }
+        
+        /* استایل شبیه‌سازی شده برای عنوان Premium (طلایی) */
+        .premium-title {
+            background: linear-gradient(180deg, #ffeb3b 0%, #fbc02d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: #fbc02d; /* Fallback */
+            font-weight: 700;
+            padding: 4px 0;
+            font-size: 1.125rem; /* text-lg */
+        }
+
+        /* استایل قیمت تومانی (جدید - بالای دکمه) */
+        .toman-price-display {
+            background-color: #ffe8d6; /* Light Orange/Peach */
+            color: #d97706; /* Orange-600 */
+            font-size: 1.125rem; /* text-lg */
+            font-weight: 800;
+            text-align: center;
+            padding: 0.5rem 0;
+            border-radius: 0.5rem;
+            margin-bottom: 0.75rem;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* استایل دکمه خرید تلگرام */
+        .telegram-button {
+            background-color: #0088CC; /* Telegram Blue */
+            transition: background-color 0.15s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            font-size: 0.95rem; 
+            padding: 0.75rem 0.5rem; 
+            font-weight: 700;
+            text-decoration: none; /* برای تگ <a> */
+        }
+        .telegram-button:hover {
+            background-color: #0077b3; /* Slightly darker blue */
+        }
+        
+        /* استایل هدر برای نمایش لوگو و عنوان */
+        #header-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* ریسپانسیو کردن هدر */
+        @media (max-width: 640px) {
+            #header-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            #header-logo-container {
+                margin-left: auto; /* Push logos to the left (RTL) */
+            }
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        
+        <!-- هدر صفحه -->
+        <header id="header-content" class="mb-6 sm:mb-8 p-4 bg-white rounded-xl shadow-lg border-t-4 border-orange-500 flex items-center justify-between flex-wrap">
+            
+            <!-- بخش عنوان و نکته (سمت راست) -->
+            <div class="flex-grow">
+                <h1 class="flex items-center text-orange-500 font-bold text-xl sm:text-2xl">
+                    <span classs="ml-2 bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; background-color: #f97316; color: white; margin-left: 8px;">۲</span>
+                    لطفاً مقدار شارژ مورد نظر را انتخاب کنید
+                </h1>
+                <p class="text-gray-600 text-sm mt-2 mr-8">
+                    نکته: برای خرید محصول، به ربات تلگرام هدایت می‌شوید.
+                </p>
+            </div>
+
+            <!-- لوگو و متن سفارشی (سمت چپ) -->
+            <div id="header-logo-container" class="flex items-center gap-2 flex-shrink-0 mt-4 sm:mt-0">
+                <img src="images/BloodStrikeLogo.webp" alt="لوگوی Blood Strike" class="w-10 h-10 rounded-lg shadow-md" onerror="this.onerror=null;this.src='https://placehold.co/40x40/f0f0f0/333?text=Logo';">
+                <img src="images/BloodStrike.webp" alt="متن Blood Strike" class="h-6 w-auto" onerror="this.onerror=null;this.src='https://placehold.co/100x24/f0f0f0/333?text=Text';">
+            </div>
+            
+        </header>
+
+        <!-- نمایش پیام Loading یا Error -->
+        <div id="status-message" class="text-center p-6 text-gray-700 text-lg font-medium">
+            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-blue-500 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            در حال دریافت اطلاعات محصولات...
+        </div>
+
+        <!-- کانتینر محصولات (Grid) -->
+        <div id="products-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 hidden">
+            <!-- کارت‌های محصولات به صورت داینامیک از API بارگذاری می‌شوند -->
+        </div>
+        
+        <!-- پیغام موفقیت/خطای خرید (شبیه Alert) -->
+        <div id="cart-message" classS="fixed top-0 left-1/2 -translate-x-1/2 mt-4 p-4 text-center rounded-lg shadow-xl z-50 transition-transform duration-300 transform scale-0" role="alert">
+            <!-- اینجا پیام‌های خرید نمایش داده می‌شوند -->
+        </div>
+
+    </div>
+
+    <script>
+        // متغیرهای عمومی
+        const productsContainer = document.getElementById('products-container');
+        const statusMessage = document.getElementById('status-message');
+        const cartMessage = document.getElementById('cart-message');
+        
+        // !!! مهم: آدرس ربات تلگرام خود را اینجا وارد کنید
+        const TELEGRAM_BOT_URL = 'https://t.me/YourTelegramBotID'; 
+        
+        // آدرس API شما
+        const API_URL = 'https://ravenshop-proxy.bloodstrike.workers.dev/products';
+
+        // تابع نمایش پیغام (جایگزین alert)
+        function showCartMessage(message, type = 'success') {
+            cartMessage.textContent = message;
+            
+            // تنظیم استایل بر اساس نوع پیغام
+            cartMessage.classList.remove('bg-green-500', 'bg-red-500', 'bg-blue-500', 'text-white', 'scale-0');
+
+            if (type === 'success') {
+                cartMessage.classList.add('bg-green-500', 'text-white');
+            } else if (type === 'error') {
+                cartMessage.classList.add('bg-red-500', 'text-white');
+            } else if (type === 'info') {
+                cartMessage.classList.add('bg-blue-500', 'text-white');
+            } else {
+                cartMessage.classList.add('bg-gray-500', 'text-white');
+            }
+
+            // نمایش پیغام با انیمیشن
+            cartMessage.classList.add('scale-100');
+
+            // مخفی کردن بعد از ۳ ثانیه
+            setTimeout(() => {
+                cartMessage.classList.remove('scale-100');
+                cartMessage.classList.add('scale-0');
+            }, 3000);
+        }
+
+        /**
+         * تابعی برای استخراج اطلاعات محصول و ساخت HTML
+         * @param {object} product - آبجکت محصول از API
+         */
+        function renderProductCard(product) {
+            // قیمت نهایی را به تومان و با جداکننده هزارگان فرمت می‌کنیم
+            const priceToman = product.final_price.toLocaleString('fa-IR');
+            
+            // آدرس تصویر را بر اساس ID محصول می‌سازیم
+            // شما باید تصاویر خود را در پوشه /images/ با نام [id].webp قرار دهید
+            const imageSrc = `images/${product.id}.webp`;
+
+            // بررسی اینکه آیا محصول "Premium" است یا خیر
+            const isPremium = product.name.toLowerCase().includes('premium');
+            
+            // بررسی برای برچسب "GAMES CLUB ONLY"
+            // این منطق بر اساس عکس قبلی شماست، ممکن است نیاز به تغییر داشته باشد
+            const hasBadge = !product.name.toLowerCase().includes('pass');
+
+            // استخراج عنوان اصلی (Cname)
+            const title = product.Cname;
+            
+            // استخراج زیرعنوان (بخش بعد از کاما در name)
+            let subtitle = '';
+            if (product.name.includes(',')) {
+                const parts = product.name.split(',');
+                if (parts.length > 1) {
+                    subtitle = parts[1].trim(); // متن بعد از کاما
+                }
+            }
+
+            // ساخت بدنه HTML کارت
+            const cardHtml = `
+                <div class="product-card rounded-xl p-4 flex flex-col items-center justify-between">
+                    ${hasBadge ? '<div class="badge-top-right">GAMES CLUB ONLY</div>' : ''}
+                    
+                    <!-- بخش تصویر -->
+                    <div class="flex-grow flex items-center justify-center p-2 mb-3 h-32">
+                        <img src="${imageSrc}" alt="${title}" class="max-w-full max-h-full object-contain" onerror="this.onerror=null;this.src='https://placehold.co/120x120/f0f0f0/333?text=${title}';">
+                    </div>
+                    
+                    <!-- بخش اطلاعات -->
+                    <div class="text-center w-full">
+                        ${isPremium ? 
+                            `<div class="premium-title mb-1">${title}</div>` : 
+                            `<div class="text-gray-800 text-lg font-bold mb-1">${title}</div>`
+                        }
+                        
+                        ${subtitle ? `<div class="text-xs text-gray-500 h-8">${subtitle}</div>` : '<div class="h-8"></div>'}
+                    </div>
+
+                    <!-- نمایش قیمت تومانی (جدید - بالای دکمه) -->
+                    <div classs="toman-price-display w-full mt-2">
+                        ${priceToman} تومان
+                    </div>
+
+                    <!-- دکمه خرید تلگرام -->
+                    <a href="${TELEGRAM_BOT_URL}?start=buy_${product.id}" target="_blank" class="telegram-button w-full text-white font-bold rounded-lg shadow-md hover:shadow-lg text-base no-underline mt-2">
+                        خرید مستقیم این محصول
+                    </a>
+                </div>
+            `;
+            
+            const div = document.createElement('div');
+            div.innerHTML = cardHtml.trim();
+            
+            return div.firstChild;
+        }
+
+        // تابع اصلی برای دریافت قیمت‌ها و رندر کردن محصولات
+        async function fetchProductsAndRender() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const products = await response.json();
+
+                // ۲. حذف پیغام لودینگ
+                statusMessage.classList.add('hidden');
+        
+                // ۳. رندر کردن محصولات
+                if (products && products.length > 0) {
+                     productsContainer.classList.remove('hidden'); // نمایش کانتینر
+                     products.forEach(product => {
+                        const card = renderProductCard(product);
+                        productsContainer.appendChild(card);
+                    });
+                } else {
+                    statusMessage.textContent = 'محصولی برای نمایش یافت نشد.';
+                    statusMessage.classList.remove('hidden');
+                }
+
+            } catch (error) {
+                console.error('Error fetching products:', error);
+                statusMessage.textContent = 'خطا در بارگذاری محصولات. لطفاً صفحه را رفرش کنید.';
+                statusMessage.classList.remove('hidden');
+                productsContainer.classList.add('hidden');
+            }
+        }
+
+        // اجرای توابع هنگام بارگذاری کامل صفحه
+        document.addEventListener('DOMContentLoaded', () => {
+            // تنظیم تصاویر هدر
+            // مطمئن شوید که این فایل‌ها در پوشه images در کنار فایل HTML شما هستند
+            bsLogoImg.src = "images/BloodStrikeLogo.webp";
+            bsTextImg.src = "images/BloodStrike.webp";
+            
+            // فراخوانی API و رندر محصولات
+            fetchProductsAndRender();
+        });
+
+        
+    </script>
+</body>
+</html>

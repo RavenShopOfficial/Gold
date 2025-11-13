@@ -10,17 +10,28 @@
     <style>
         /* تنظیمات کلی فونت و رنگ پس زمینه */
         body {
-            font-family: 'Vazirmatn', 'Inter', sans-serif;
-            background-image: url('images/BackGround.webp'); /* مسیر عکس */
-            background-size: cover; /* عکس کل صفحه رو پر کنه */
-            background-repeat: no-repeat; /* تکرار نشه */
-            background-position: center; /* وسط چین بشه */
+        font-family: 'Vazirmatn', 'Inter', sans-serif;
+        background-image: url('images/BackGround.webp');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        animation: moveBg 10s linear infinite alternate;
+    }
+
+    /* تعریف انیمیشن */
+    @keyframes moveBg {
+        0% {
+            background-position: 0% center;
         }
+        100% {
+            background-position: 100% center;
+        }
+    }
 
 
         /* استایل سفارشی برای کارت محصولات */
         .product-card {
-            background-color: #ffffff;
+            background-color: #e9ecef;
             transition: all 0.3s ease;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
             border: 1px solid #e5e7eb;

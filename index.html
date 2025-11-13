@@ -38,7 +38,7 @@
             position: absolute;
             top: 0;
             right: 0;
-            background-color: #dc2626; /* Red-600 */
+            background-color: #dc2626; /* Red-600 (پیش‌فرض) */
             color: white;
             padding: 2px 8px;
             font-size: 0.75rem;
@@ -49,7 +49,7 @@
         
         /* استایل شبیه‌سازی شده برای عنوان Premium (طلایی) */
         .premium-title {
-            background: linear-gradient(180deg, #ffeb3b 0%, #fbc02d 100%);
+            background: linear-gradient(180deg, #070707 0%, #050505 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             color: #fbc02d; /* Fallback */
@@ -161,11 +161,53 @@
         const statusMessage = document.getElementById('status-message');
         const cartMessage = document.getElementById('cart-message');
         
-        // !!! مهم: آدرس ربات تلگرام خود را اینجا وارد کنید
-        const TELEGRAM_BOT_URL = 'https://t.me/YOUR_BOT_USERNAME_HERE'; // <--- آدرس ربات خود را اینجا بگذارید
-        
+        // !!! مهم: آدرس ربات تلگرام شما (استفاده به عنوان پیش فرض)
+        const TELEGRAM_BOT_USERNAME = 'YOUR_BOT_USERNAME_HERE'; // <--- فقط یوزرنیم ربات را اینجا بگذارید
+        const TELEGRAM_BOT_URL = `https://t.me/${TELEGRAM_BOT_USERNAME}`;
+
         // آدرس API شما
         const API_URL = 'https://ravenshop-proxy.bloodstrike.workers.dev/products';
+
+        /**
+         * آبجکت ۱: شخصی‌سازی متن Badge بر اساس ID محصول.
+         * * - کلید: ID محصول (به صورت رشته)
+         * - مقدار: متن سفارشی Badge (یا null برای حذف Badge)
+         * * اگر ID محصولی در این لیست نباشد، Badge نمایش داده می‌شود و متن آن 'Trusted' خواهد بود.
+         */
+
+        const CUSTOM_BADGE_TEXTS = {
+            545970: "واریز آنی",
+            545978: "واریز آنی",
+            600062: "واریز آنی",
+            545992: "واریز آنی",
+            545996: "واریز آنی",
+            546012: "واریز آنی",
+            545981: "واریز با چند دقیقه تاخیر",
+            545987: "واریز با چند دقیقه تاخیر",
+            545977: "واریز با چند دقیقه تاخیر",
+            545968: "واریز با چند دقیقه تاخیر"
+        };
+        
+        /**
+         * آبجکت ۲: شخصی‌سازی لینک تلگرام (href) بر اساس ID محصول.
+         * * - کلید: ID محصول (به صورت رشته)
+         * - مقدار: لینک کامل سفارشی (مثال: https://t.me/anotherbot?start=custom_key)
+         * * اگر ID محصولی در این لیست نباشد، از لینک پیش‌فرض (با start=buy_[product.id]) استفاده می‌شود.
+         */
+        const CUSTOM_TELEGRAM_LINKS = {
+            //"545970": "https://t.me/anotherbot_for_golds?start=gold_105",
+            "545970": "https://t.me/RavenZoneBot?start=B_d9c915",
+            "545978": "https://t.me/RavenZoneBot?start=B_b47bea",
+            "600062": "https://t.me/RavenZoneBot?start=B_28f976",
+            "545992": "https://t.me/RavenZoneBot?start=B_d3ebe6",
+            "545996": "https://t.me/RavenZoneBot?start=B_511adb",
+            "546012": "https://t.me/RavenZoneBot?start=B_be6211",
+            "545981": "https://t.me/RavenZoneBot?start=B_8364cc",
+            "545987": "https://t.me/RavenZoneBot?start=B_577cd8",
+            "545977": "https://t.me/RavenZoneBot?start=B_ff0235",
+            "545968": "https://t.me/RavenZoneBot?start=B_3cc2a8"
+        };
+
 
         // تابع نمایش پیغام (جایگزین alert)
         function showCartMessage(message, type = 'success') {
@@ -200,14 +242,28 @@
             const priceToman = product.final_price.toLocaleString('fa-IR');
             
             // آدرس تصویر را بر اساس ID محصول می‌سازیم
-            // شما باید تصاویر خود را در پوشه /images/ با نام [id].webp قرار دهید
             const imageSrc = `images/${product.id}.webp`;
 
             // بررسی اینکه آیا محصول "Premium" است یا خیر
             const isPremium = product.name.toLowerCase().includes('premium');
             
-            // بررسی برای برچسب "GAMES CLUB ONLY"
-            const hasBadge = !product.name.toLowerCase().includes('pass');
+            // --- ۱. منطق Badge ---
+            let badgeText = CUSTOM_BADGE_TEXTS[String(product.id)];
+            if (badgeText === undefined) {
+                badgeText = 'Trusted';
+            }
+            
+            // --- ۲. منطق لینک تلگرام ---
+            let telegramLink;
+            const customLink = CUSTOM_TELEGRAM_LINKS[String(product.id)];
+            
+            if (customLink) {
+                // استفاده از لینک سفارشی
+                telegramLink = customLink;
+            } else {
+                // استفاده از لینک پیش‌فرض (با پارامتر start)
+                telegramLink = `${TELEGRAM_BOT_URL}?start=buy_${product.id}`;
+            }
 
             // استخراج عنوان اصلی (Cname)
             const title = product.Cname;
@@ -227,7 +283,7 @@
 
             // ساخت بدنه HTML کارت
             cardElement.innerHTML = `
-                ${hasBadge ? '<div class="badge-top-right">GAMES CLUB ONLY</div>' : ''}
+                ${badgeText ? `<div class="badge-top-right">${badgeText}</div>` : ''}
                 
                 <!-- بخش تصویر -->
                 <div class="flex-grow flex items-center justify-center p-2 mb-3 h-32">
@@ -250,9 +306,9 @@
                     ${priceToman} تومان
                 </div>
 
-                <!-- دکمه خرید تلگرام -->
-                <a href="${TELEGRAM_BOT_URL}?start=buy_${product.id}" target="_blank" class="telegram-button w-full text-white font-bold rounded-lg shadow-md hover:shadow-lg text-base no-underline mt-2">
-                    خرید مستقیم این محصول
+                <!-- دکمه خرید تلگرام (لینک بر اساس منطق جدید) -->
+                <a href="${telegramLink}" target="_blank" class="telegram-button w-full text-white font-bold rounded-lg shadow-md hover:shadow-lg text-base no-underline mt-2">
+                    خرید از ربات تلگرام
                 </a>
             `;
             
@@ -269,10 +325,8 @@
                 
                 const products = await response.json();
 
-                // ۲. حذف پیغام لودینگ
                 statusMessage.classList.add('hidden');
         
-                // ۳. رندر کردن محصولات
                 if (products && products.length > 0) {
                      productsContainer.classList.remove('hidden'); // نمایش کانتینر
                      products.forEach(product => {
@@ -297,10 +351,11 @@
             // تنظیم تصاویر هدر
             // مطمئن شوید که این فایل‌ها در پوشه images در کنار فایل HTML شما هستند
             // اگر فایل‌ها در همان دایرکتوری index.html هستند، آدرس را به './' تغییر دهید
-            const imageBasePath = 'images/'; // یا هر مسیری که تنظیم کرده‌اید
+            const imageBasePath = 'images/';
             
-            const logoImg = document.getElementById('bslogo-img');
-            const textImg = document.getElementById('bloodstrike-text-img');
+            // اصلاح شده: استفاده از کوئری سلکتور برای اطمینان از یافتن المان‌ها
+            const logoImg = document.querySelector('#header-logo-container img:first-child');
+            const textImg = document.querySelector('#header-logo-container img:last-child');
             
             if (logoImg) {
                 logoImg.src = `${imageBasePath}BloodStrikeLogo.webp`;
